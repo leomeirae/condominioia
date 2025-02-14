@@ -57,7 +57,7 @@ const Integration = () => {
                     <div className="absolute top-1/2 -translate-y-1/2 right-1/4 w-3/5 h-14 lg:h-20 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full -rotate-12 blur-[6.5rem] -z-10"></div>
 
                     <div className="flex items-center justify-center mb-8">
-                        <Images.logo className="size-16 md:size-20" />
+                        <Images.logo className="size-16 md:size-20 rounded-2xl" />
                     </div>
 
                     <div className="flex flex-wrap justify-center gap-4 mb-8">
@@ -69,10 +69,6 @@ const Integration = () => {
                                 <platform.icon className={cn("text-foreground", getIconSizeClasses(platform.iconSize))} />
                             </div>
                         ))}
-                    </div>
-
-                    <div className="max-w-sm w-full h-auto mx-auto">
-                        <Images.logo className="w-full h-auto" />
                     </div>
                 </div>
             </Container>
@@ -86,7 +82,7 @@ const Integration = () => {
                     </div>
 
                     <div className="absolute z-20 flex items-center justify-center group">
-                        <Images.logo className="size-24 group-hover:scale-110 transition-all duration-500" />
+                        <Images.logo className="size-24 group-hover:scale-110 transition-all duration-500 rounded-2xl" />
                     </div>
 
                     {SOCIAL_PLATFORMS.map((platform, index) => (
