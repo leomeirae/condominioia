@@ -13,17 +13,21 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en" suppressHydrationWarning>
+        <html lang="en" suppressHydrationWarning className="dark">
             <body
                 className={cn(
-                    "min-h-screen bg-background text-foreground antialiased font-heading overflow-x-hidden !scrollbar-hide",
+                    "min-h-screen bg-background font-sans antialiased",
                     base.variable,
                     heading.variable,
                     subheading.variable,
                 )}
             >
-                    <Toaster richColors theme="dark" position="top-right" />
-                    {children}
+                <main className="relative flex min-h-screen flex-col">
+                    <div className="flex-grow flex-1">
+                        {children}
+                    </div>
+                </main>
+                <Toaster richColors theme="dark" position="top-right" />
             </body>
         </html>
     );
