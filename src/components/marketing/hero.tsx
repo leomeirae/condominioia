@@ -1,6 +1,7 @@
 import Container from "../global/container";
 import Icons from "../global/icons";
 import { OrbitingCircles } from "../ui/orbiting-circles";
+import DynamicDashboardBox from "./DynamicDashboardBox";
 
 const Hero = () => {
     return (
@@ -45,7 +46,7 @@ const Hero = () => {
                             <span className="backdrop absolute inset-[1px] rounded-full bg-background transition-colors duration-200 group-hover:bg-neutral-800" />
                             <span className="z-10 py-0.5 text-sm text-neutral-100 flex items-center">
                                 <span className="px-2 py-[0.5px] h-[18px] tracking-wide flex items-center justify-center rounded-full bg-gradient-to-r from-sky-400 to-blue-600 text-[9px] font-medium mr-2 text-white">
-                                    AI Agents
+                                    Aentes de IA
                                 </span>
                                 A gestão do Futuro
                             </span>
@@ -55,15 +56,24 @@ const Hero = () => {
                         <h1 className="text-4xl md:text-4xl lg:text-7xl font-bold text-center !leading-tight max-w-4xl mx-auto">
                              {" "}
                             <span className="">
-                                Evolua na Gestão de Clientes {" "}
+                            A Revolução na Gestão  {" "}
                             </span>
-                            com Inteligência Artificial
+                            de Condomínios com Agentes Inteligentes
                         </h1>
                     </Container>
                     <Container delay={0.2}>
-                        <p className="max-w-xl mx-auto mt-2 text-base lg:text-lg text-center text-muted-foreground">
-                        Agentes de IA que inovam, antecipam e elevam a gestão do seu condomínio para um novo patamar.
+                        <p className="max-w-xl mx-auto mt-2 text-base 2xl:text-2xl text-center text-muted-foreground/100">
                         </p>
+                    </Container>
+                    <Container delay={0.25}>
+                        <div className="flex flex-col items-center justify-center gap-y-4 bg-background p-4 rounded-xl shadow-md max-w-2xl mx-auto">
+                            <p className="text-lg text-foreground">
+                            Agentes Inteligentes já transformam a interação com clientes em diversos setores. Agora, é a vez da gestão de condomínios elevar a eficiência e satisfação com CondominioIA.
+                            </p>
+                        </div>
+                    </Container>
+                    <Container delay={0.28}>
+                        <DynamicDashboardBox />
                     </Container>
                     <Container delay={0.3} className="relative">
                         <div className="relative rounded-xl lg:rounded-[32px] border border-border p-2 backdrop-blur-lg mt-10 max-w-6xl mx-auto">
