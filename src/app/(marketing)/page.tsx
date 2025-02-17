@@ -6,7 +6,10 @@ import Hero from "@/components/marketing/hero";
 import Integration from "@/components/marketing/integration";
 import AgentsSection from '@/components/marketing/AgentsSection'
 import ServiceIntegration from '@/components/marketing/ServiceIntegration'
+<<<<<<< HEAD
 import ChatButton from '@/components/marketing/ChatButton'
+=======
+>>>>>>> cf1c07d14e37fda4ed7a6ba213966f229f22b7ec
 
 const HomePage = () => {
     return (
@@ -17,7 +20,10 @@ const HomePage = () => {
             <Analysis />
             <Integration />
             <ServiceIntegration />
+<<<<<<< HEAD
             <ChatButton />
+=======
+>>>>>>> cf1c07d14e37fda4ed7a6ba213966f229f22b7ec
             <CTA />
         </Wrapper>
     )
