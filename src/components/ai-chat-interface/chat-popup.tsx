@@ -1,8 +1,13 @@
 "use client"
 
 import { useState } from "react"
-import { X } from "lucide-react"
-import ChatApp from "./chat-app"
+import { X, Minus, MessageSquare } from "lucide-react"
+import { ChatInterface } from "./chat-interface"
+
+const DEFAULT_USER = {
+  name: "Visitante",
+  email: "visitante@example.com"
+}
 
 interface ChatPopupProps {
   isOpen: boolean;
@@ -14,63 +19,43 @@ export function ChatPopup({ isOpen, onClose }: ChatPopupProps) {
 
   if (!isOpen) return null
 
-  return (
-    <div className="fixed bottom-4 right-4 z-50">
-      {isMinimized ? (
+  if (isMinimized) {
+    return (
+      <div className="fixed bottom-4 right-4 z-50">
         <button
           onClick={() => setIsMinimized(false)}
-          className="bg-[#2666eb] hover:bg-blue-700 text-white p-4 rounded-full shadow-lg"
+          className="bg-[#3B82F6] hover:bg-blue-600 text-white p-4 rounded-full shadow-lg transition-colors"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-          </svg>
+          <MessageSquare className="h-6 w-6" />
         </button>
-      ) : (
-        <div className="bg-[#1a1c2e] rounded-lg shadow-2xl w-[420px] max-h-[90vh] flex flex-col animate-in slide-in-from-bottom duration-300">
-          <div className="flex justify-between items-center p-4 border-b border-gray-800">
-            <h2 className="text-white font-semibold">Concierge AI</h2>
-            <div className="flex gap-2">
-              <button
-                onClick={() => setIsMinimized(true)}
-                className="text-gray-400 hover:text-white"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <line x1="5" y1="12" x2="19" y2="12" />
-                </svg>
-              </button>
-              <button
-                onClick={onClose}
-                className="text-gray-400 hover:text-white"
-              >
-                <X size={20} />
-              </button>
-            </div>
-          </div>
-          <div className="flex-1 overflow-y-auto">
-            <ChatApp />
+      </div>
+    )
+  }
+
+  return (
+    <div className="fixed bottom-4 right-4 z-50 w-[420px]">
+      <div className="bg-[#14151A] rounded-lg shadow-2xl">
+        {/* Header com controles */}
+        <div className="bg-[#14151A] px-4 py-2 flex items-center justify-end rounded-t-lg border-b border-gray-800">
+          <div className="flex gap-2">
+            <button
+              onClick={() => setIsMinimized(true)}
+              className="p-2 text-gray-400 hover:text-white transition-colors rounded-full hover:bg-gray-800"
+            >
+              <Minus className="h-4 w-4" />
+            </button>
+            <button
+              onClick={onClose}
+              className="p-2 text-gray-400 hover:text-white transition-colors rounded-full hover:bg-gray-800"
+            >
+              <X className="h-4 w-4" />
+            </button>
           </div>
         </div>
-      )}
+
+        {/* Chat Interface */}
+        <ChatInterface userInfo={DEFAULT_USER} />
+      </div>
     </div>
   )
 } 
