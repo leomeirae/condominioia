@@ -88,6 +88,38 @@ const config: Config = {
 						transform: "rotate(360deg)"
 					},
 				},
+				"pulse-ring": {
+					"0%": {
+						transform: "scale(0.95)",
+						boxShadow: "0 0 0 0 rgba(59, 130, 246, 0.6)",
+						opacity: "0.6"
+					},
+					"70%": {
+						transform: "scale(1.05)",
+						boxShadow: "0 0 0 15px rgba(59, 130, 246, 0)",
+						opacity: "0.3"
+					},
+					"100%": {
+						transform: "scale(0.95)",
+						boxShadow: "0 0 0 0 rgba(59, 130, 246, 0)",
+						opacity: "0.6"
+					}
+				},
+				"bounce-subtle": {
+					"0%, 100%": {
+						transform: "translateY(-15%)",
+						animationTimingFunction: "cubic-bezier(0.8, 0, 1, 1)"
+					},
+					"50%": {
+						transform: "translateY(0)",
+						animationTimingFunction: "cubic-bezier(0, 0, 0.2, 1)"
+					}
+				},
+				"shine": {
+					"100%": {
+						transform: "translateX(100%)"
+					}
+				},
 				flip: {
 					to: {
 						transform: "rotate(360deg)",
@@ -143,7 +175,10 @@ const config: Config = {
 				orbit: "orbit calc(var(--duration)*1s) linear infinite",
 				ripple: "ripple var(--duration,2s) ease calc(var(--i, 0)*.2s) infinite",
 				"image-glow": "image-glow 6s ease-out 0.6s forwards",
-				"fade-in": "fade-in 0.5s ease-out forwards"
+				"fade-in": "fade-in 0.5s ease-out forwards",
+				"pulse-ring": "pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+				"bounce-subtle": "bounce-subtle 2s infinite",
+				"shine": "shine 8s ease-in-out infinite"
 			},
 			spacing: {
 				"1/8": "12.5%",
