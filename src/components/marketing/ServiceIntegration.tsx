@@ -1,5 +1,6 @@
 "use client"
 import { motion } from "framer-motion"
+import { MagicCard } from "../ui/magic-card"
 import { 
   Wrench, 
   Droplet,
@@ -127,99 +128,96 @@ const ServiceIntegration = () => {
               Principais Integrações
             </h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            Integrando vários serviços essenciais em uma plataforma única e acessível. 
-            O agente ConciergeAI está sempre ativo, vai conhecer cada morador e suas preferências, oferecendo uma experiência personalizada em um só lugar.
+              Integrando vários serviços essenciais em uma plataforma única e acessível. 
+              O agente ConciergeAI está sempre ativo, vai conhecer cada morador e suas preferências, oferecendo uma experiência personalizada em um só lugar.
             </p>
           </motion.div>
 
           {/* Serviços Principais */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
-            {services.map((category, index) => (
-              <motion.div
-                key={category.category}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 * index }}
-                className="bg-background/40 backdrop-blur-sm p-6 rounded-xl border border-border/50"
-              >
-                <h3 className="text-xl font-semibold mb-2">{category.category}</h3>
-                <p className="text-sm text-muted-foreground mb-4">{category.description}</p>
-                <div className="grid grid-cols-2 gap-4">
-                  {category.items.map((service, index) => (
-                    <motion.div
-                      key={service.name}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.3, delay: 0.1 * (index + index) }}
-                      className="flex items-center gap-3 p-3 rounded-lg bg-background/60 hover:bg-background/80 transition-colors"
-                    >
-                      <service.icon className="w-5 h-5 text-primary" />
-                      <span className="text-sm">{service.name}</span>
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
+            {services.map((category) => (
+              <div key={category.category} className="rounded-2xl bg-background/40 relative border border-border/50">
+                <MagicCard
+                  gradientFrom="#38bdf8"
+                  gradientTo="#3b82f6"
+                  gradientColor="rgba(59,130,246,0.1)"
+                  className="p-6 w-full overflow-hidden"
+                >
+                  <div className="absolute bottom-0 right-0 bg-blue-500 w-1/4 h-1/4 blur-[8rem] z-20"></div>
+                  <h3 className="text-xl font-semibold mb-2">{category.category}</h3>
+                  <p className="text-sm text-muted-foreground mb-4">{category.description}</p>
+                  <div className="grid grid-cols-2 gap-4">
+                    {category.items.map((service) => (
+                      <div
+                        key={service.name}
+                        className="flex items-center gap-3 p-3 rounded-lg bg-background/60 hover:bg-background/80 transition-colors"
+                      >
+                        <service.icon className="w-5 h-5 text-primary" />
+                        <span className="text-sm">{service.name}</span>
+                      </div>
+                    ))}
+                  </div>
+                </MagicCard>
+              </div>
             ))}
           </div>
 
           {/* Novas Possibilidades */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="bg-background/40 backdrop-blur-sm p-8 rounded-xl border border-border/50 mb-16"
-          >
-            <h3 className="text-2xl font-semibold mb-8">Novas Possibilidades</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {newFeatures.map(feature => (
-                <div key={feature.category} className="space-y-4">
-                  <h4 className="text-lg font-medium flex items-center gap-2">
-                    <feature.icon className="w-5 h-5 text-primary" />
-                    {feature.category}
-                  </h4>
-                  <ul className="space-y-2">
-                    {feature.items.map((item) => (
-                      <li key={item} className="text-sm text-muted-foreground">
-                        • {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </motion.div>
+          <div className="rounded-2xl bg-background/40 relative border border-border/50 mb-16">
+            <MagicCard
+              gradientFrom="#38bdf8"
+              gradientTo="#3b82f6"
+              gradientColor="rgba(59,130,246,0.1)"
+              className="p-8 w-full overflow-hidden"
+            >
+              <div className="absolute bottom-0 right-0 bg-sky-500 w-1/4 h-1/4 blur-[8rem] z-20"></div>
+              <h3 className="text-2xl font-semibold mb-8">Novas Possibilidades</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {newFeatures.map(feature => (
+                  <div key={feature.category} className="space-y-4">
+                    <h4 className="text-lg font-medium flex items-center gap-2">
+                      <feature.icon className="w-5 h-5 text-primary" />
+                      {feature.category}
+                    </h4>
+                    <ul className="space-y-2">
+                      {feature.items.map((item) => (
+                        <li key={item} className="text-sm text-muted-foreground">
+                          • {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </MagicCard>
+          </div>
 
           {/* Personalização */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-            className="text-center"
-          >
-            <h3 className="text-2xl font-semibold mb-8">Personalização Total</h3>
+          <div className="space-y-8">
+            <h3 className="text-2xl font-semibold text-center mb-8">Personalização Total</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
               {customization.map((type) => (
-                <div 
-                  key={type.type}
-                  className="p-6 rounded-xl bg-background/40 backdrop-blur-sm border border-border/50"
-                >
-                  <type.icon className="w-8 h-8 text-primary mx-auto mb-4" />
-                  <h4 className="font-medium mb-2">{type.type}</h4>
-                  <p className="text-sm text-muted-foreground">{type.description}</p>
+                <div key={type.type} className="rounded-2xl bg-background/40 relative border border-border/50">
+                  <MagicCard
+                    gradientFrom="#38bdf8"
+                    gradientTo="#3b82f6"
+                    gradientColor="rgba(59,130,246,0.1)"
+                    className="p-6 w-full overflow-hidden"
+                  >
+                    <div className="absolute bottom-0 right-0 bg-blue-500 w-1/4 h-1/4 blur-[8rem] z-20"></div>
+                    <type.icon className="w-8 h-8 text-primary mx-auto mb-4" />
+                    <h4 className="font-medium mb-2 text-center">{type.type}</h4>
+                    <p className="text-sm text-muted-foreground text-center">{type.description}</p>
+                  </MagicCard>
                 </div>
               ))}
             </div>
             
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.8 }}
-              className="flex items-center justify-center gap-2 text-xl font-medium text-primary"
-            >
+            <div className="flex items-center justify-center gap-2 text-xl font-medium text-primary">
               <Smartphone className="w-6 h-6" />
               Tudo integrado. Tudo sob medida.
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         </div>
       </Container>
     </section>
