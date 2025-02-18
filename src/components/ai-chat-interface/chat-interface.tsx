@@ -31,6 +31,29 @@ export function ChatInterface({ userInfo }: ChatInterfaceProps) {
     "De que maneira o CondomínioIA ajuda na gestão eficiente do meu condomínio?",
   ]
 
+  // Função para formatar o texto da resposta
+  const formatAIResponse = (text: string) => {
+    // Remove marcadores markdown de números (1., 2., etc)
+    let formatted = text.replace(/^\d+\.\s+/gm, '• ');
+    
+    // Remove asteriscos duplos (bold no markdown)
+    formatted = formatted.replace(/\*\*/g, '');
+    
+    // Substitui múltiplos espaços por um único espaço
+    formatted = formatted.replace(/\s+/g, ' ');
+    
+    // Adiciona quebra de linha após pontos que terminam frases
+    formatted = formatted.replace(/\.\s+/g, '.\n');
+    
+    // Remove quebras de linha extras
+    formatted = formatted.replace(/\n{3,}/g, '\n\n');
+    
+    // Trata listas com hífen ou asterisco
+    formatted = formatted.replace(/^[-*]\s+/gm, '• ');
+
+    return formatted.trim();
+  }
+
   const handleSendMessage = async (message: string) => {
     if (!message.trim() || isLoading) return
 
@@ -70,14 +93,14 @@ export function ChatInterface({ userInfo }: ChatInterfaceProps) {
           }
         } else {
           accumulatedMessage += chunk
-          setCurrentStreamedMessage(accumulatedMessage)
+          setCurrentStreamedMessage(formatAIResponse(accumulatedMessage))
         }
       }
 
       // Add the complete message to the messages array
       setMessages((prev) => [...prev, { 
         id: Date.now() + 1, 
-        text: accumulatedMessage.trim(), 
+        text: formatAIResponse(accumulatedMessage.trim()), 
         sender: "ai" 
       }])
       
