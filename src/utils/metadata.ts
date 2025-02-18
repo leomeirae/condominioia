@@ -17,7 +17,7 @@ interface MetadataProps {
 
 export const generateMetadata = ({
     title = `Condomínio IA - Agentes de IA que Revolucionam a Gestão`,
-    description = `Vetra is an intelligent project management platform that transforms how teams work together. Leverage AI to automate workflows, enhance collaboration, and boost productivity. Experience smarter project management today.`,
+    description = `Condomínio IA é uma plataforma de inteligência artificial que transforma a gestão de condomínios. Utilize IA para automatizar fluxos de trabalho, melhorar a colaboração e aumentar a produtividade. Experimente a gestão inteligente hoje.`,
     icons = [
         {
             rel: "icon",

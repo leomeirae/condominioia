@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server"
 
-export async function POST(req: Request) {
+export async function POST() {
   try {
-    const { message, userInfo } = await req.json()
 
     // TODO: Implement new chat API integration here
     // This is a placeholder response
