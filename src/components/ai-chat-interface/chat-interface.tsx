@@ -1,11 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Card, CardContent } from "@/components/ui/card"
 import { SmilePlus, Send } from "lucide-react"
-import Image from "next/image"
 import type { UserInfo } from "./chat-app"
 
 interface Message {
@@ -19,11 +17,20 @@ interface ChatInterfaceProps {
 }
 
 export function ChatInterface({ userInfo }: ChatInterfaceProps) {
+  const messagesEndRef = useRef<HTMLDivElement>(null)
   const [messages, setMessages] = useState<Message[]>([])
   const [inputMessage, setInputMessage] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  const [threadId, setThreadId] = useState<string | null>(null)
   const [currentStreamedMessage, setCurrentStreamedMessage] = useState("")
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+  }
+
+  // Scroll to bottom when messages change or streaming updates
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages, currentStreamedMessage])
 
   const predefinedQuestions = [
     "Como o CondomínioIA pode facilitar a minha rotina como morador?",
@@ -66,7 +73,7 @@ export function ChatInterface({ userInfo }: ChatInterfaceProps) {
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message, userInfo, threadId }),
+        body: JSON.stringify({ message, userInfo }),
       })
 
       if (!response.ok) throw new Error("Erro ao enviar mensagem")
@@ -82,19 +89,8 @@ export function ChatInterface({ userInfo }: ChatInterfaceProps) {
 
         // Decode the chunk and update the streamed message
         const chunk = new TextDecoder().decode(value)
-        
-        // Check if the chunk contains the threadId
-        if (chunk.includes("[THREAD_ID]")) {
-          const threadIdMatch = chunk.match(/\[THREAD_ID\](.*?)\[\/THREAD_ID\]/)
-          if (threadIdMatch) {
-            setThreadId(threadIdMatch[1])
-            // Remove the threadId from the message
-            accumulatedMessage = accumulatedMessage.replace(/\n\[THREAD_ID\].*?\[\/THREAD_ID\]/, "")
-          }
-        } else {
-          accumulatedMessage += chunk
-          setCurrentStreamedMessage(formatAIResponse(accumulatedMessage))
-        }
+        accumulatedMessage += chunk
+        setCurrentStreamedMessage(formatAIResponse(accumulatedMessage))
       }
 
       // Add the complete message to the messages array
@@ -121,112 +117,122 @@ export function ChatInterface({ userInfo }: ChatInterfaceProps) {
   }
 
   return (
-    <Card className="w-full bg-[#14151A] border-0 text-white shadow-2xl">
-      <CardContent className="p-0 flex flex-col h-[500px]">
-        {/* Profile Section */}
-        <div className="bg-[#3B82F6] p-4">
-          <div className="flex items-center">
-            <div className="flex items-center gap-3">
-              <Image
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image%20(1)%20(1)-ZH88H94XnQGrMPXUTElLfRiCUGa25e.png"
-                alt="Concierge AI"
-                width={40}
-                height={40}
-                className="rounded-full"
-              />
-              <div>
-                <h2 className="text-xl font-semibold">Concierge AI</h2>
-                <p className="text-sm text-blue-100">Seu assistente virtual • {userInfo.name}</p>
-              </div>
-            </div>
-          </div>
+    <div className="flex flex-col h-[calc(100vh-80px)] sm:h-[600px] max-h-[80vh] bg-[#1a1c2e] text-white">
+      {/* Header with Avatar */}
+      <div className="p-3 text-center border-b border-gray-800">
+        <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-1">
+          <img
+            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image%20(1)%20(1)-ZH88H94XnQGrMPXUTElLfRiCUGa25e.png"
+            alt="Concierge AI Avatar"
+            className="w-full h-full object-contain"
+          />
         </div>
-
-        {/* Chat Content */}
-        <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
-          {messages.length === 0 ? (
-            <div className="space-y-4">
-              {predefinedQuestions.map((question, index) => (
-                <div
-                  key={index}
-                  onClick={() => handleSendMessage(question)}
-                  className="p-4 bg-[#1E1F25] rounded-lg cursor-pointer hover:bg-[#2A2B32] transition-colors"
-                >
-                  <p className="text-white">{question}</p>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {messages.map((message) => (
-                <div
-                  key={message.id}
-                  className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
-                >
-                  <div
-                    className={`${
-                      message.sender === "user"
-                        ? "bg-[#3B82F6]"
-                        : "bg-[#1E1F25]"
-                    } p-4 rounded-lg max-w-[85%]`}
-                  >
-                    <p className="text-white">{message.text}</p>
-                  </div>
-                </div>
-              ))}
-              {/* Streaming message */}
-              {currentStreamedMessage && (
-                <div className="flex justify-start">
-                  <div className="bg-[#1E1F25] p-4 rounded-lg max-w-[85%]">
-                    <p className="text-white">{currentStreamedMessage}</p>
-                  </div>
-                </div>
-              )}
-              {/* Loading indicator */}
-              {isLoading && !currentStreamedMessage && (
-                <div className="flex justify-start">
-                  <div className="bg-[#1E1F25] p-4 rounded-lg max-w-[85%]">
-                    <p className="text-white">Digitando...</p>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
+        <h1 className="text-lg font-bold">Concierge AI</h1>
+        <div className="flex items-center justify-center gap-2 text-sm text-gray-400">
+          <div className="w-2 h-2 bg-blue-500 rounded-full" />
+          <span className="truncate">Condômino - • {userInfo.name}</span>
         </div>
+      </div>
 
-        {/* Input Section */}
-        <div className="p-4 border-t border-gray-800">
-          <div className="relative">
-            <Input
-              placeholder="Digite sua mensagem..."
-              value={inputMessage}
-              onChange={(e) => setInputMessage(e.target.value)}
-              onKeyPress={(e) => {
-                if (e.key === "Enter") {
-                  handleSendMessage(inputMessage)
-                }
-              }}
-              className="bg-[#2A2B32] border-0 text-white pr-24 pl-4 py-6"
-              disabled={isLoading}
-            />
-            <div className="absolute right-2 top-1/2 -translate-y-1/2 flex gap-2">
-              <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white">
-                <SmilePlus className="h-5 w-5" />
-              </Button>
-              <Button
-                size="icon"
-                className="bg-[#3B82F6] hover:bg-blue-600"
-                onClick={() => handleSendMessage(inputMessage)}
-                disabled={isLoading}
+      {/* Chat Messages */}
+      <div className="flex-1 overflow-y-auto p-3 space-y-3">
+        {messages.length === 0 ? (
+          <div className="space-y-4">
+            {predefinedQuestions.map((question, index) => (
+              <div
+                key={index}
+                onClick={() => handleSendMessage(question)}
+                className="p-4 bg-[#1E1F25] rounded-lg cursor-pointer hover:bg-[#2A2B32] transition-colors"
               >
-                <Send className="h-5 w-5" />
-              </Button>
-            </div>
+                <p className="text-white">{question}</p>
+              </div>
+            ))}
           </div>
-          <div className="text-center mt-4 text-sm text-gray-500">POWERED BY CONDOMÍNIO IA</div>
+        ) : (
+          <div className="space-y-4">
+            {messages.map((message) => (
+              <div
+                key={message.id}
+                className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
+              >
+                <div
+                  className={`${
+                    message.sender === "user"
+                      ? "bg-[#3B82F6]"
+                      : "bg-[#1E1F25]"
+                  } p-4 rounded-lg max-w-[85%]`}
+                >
+                  <p className="text-white">{message.text}</p>
+                </div>
+              </div>
+            ))}
+            {/* Streaming message */}
+            {currentStreamedMessage && (
+              <div className="flex justify-start">
+                <div className="bg-[#1E1F25] p-4 rounded-lg max-w-[85%]">
+                  <p className="text-white">{currentStreamedMessage}</p>
+                </div>
+              </div>
+            )}
+            {/* Loading indicator */}
+            {isLoading && !currentStreamedMessage && (
+              <div className="flex justify-start">
+                <div className="bg-[#1E1F25] p-4 rounded-lg max-w-[85%]">
+                  <p className="text-white">Digitando...</p>
+                </div>
+              </div>
+            )}
+            {/* Invisible element to scroll to */}
+            <div ref={messagesEndRef} />
+          </div>
+        )}
+      </div>
+
+      {/* Input Area with Predefined Questions */}
+      <div className="p-3 space-y-2 border-t border-gray-800">
+        {/* Predefined Questions */}
+        <div className="space-y-1.5 max-h-[30vh] sm:max-h-[200px] overflow-y-auto">
+          {predefinedQuestions.map((question, index) => (
+            <button
+              key={index}
+              onClick={() => handleSendMessage(question)}
+              className="w-full text-left p-2 rounded-lg bg-[#2b2d42] hover:bg-[#363856] transition-colors text-white text-sm"
+            >
+              {question}
+            </button>
+          ))}
         </div>
-      </CardContent>
-    </Card>
+
+        {/* Message Input */}
+        <div className="flex items-center space-x-2 bg-[#2b2d42] rounded-lg p-2">
+          <Input
+            placeholder="Digite sua mensagem..."
+            value={inputMessage}
+            onChange={(e) => setInputMessage(e.target.value)}
+            onKeyPress={(e) => {
+              if (e.key === "Enter") {
+                handleSendMessage(inputMessage)
+              }
+            }}
+            className="bg-[#2A2B32] border-0 text-white pr-24 pl-4 py-6"
+            disabled={isLoading}
+          />
+          <div className="absolute right-2 top-1/2 -translate-y-1/2 flex gap-2">
+            <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white">
+              <SmilePlus className="h-5 w-5" />
+            </Button>
+            <Button
+              size="icon"
+              className="bg-[#3B82F6] hover:bg-blue-600"
+              onClick={() => handleSendMessage(inputMessage)}
+              disabled={isLoading}
+            >
+              <Send className="h-5 w-5" />
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 
