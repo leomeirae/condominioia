@@ -146,14 +146,14 @@ const ServiceIntegration = () => {
                   <div className="absolute bottom-0 right-0 bg-blue-500 w-1/4 h-1/4 blur-[8rem] z-20"></div>
                   <h3 className="text-xl font-semibold mb-2">{category.category}</h3>
                   <p className="text-sm text-muted-foreground mb-4">{category.description}</p>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {category.items.map((service) => (
                       <div
                         key={service.name}
                         className="flex items-center gap-3 p-3 rounded-lg bg-background/60 hover:bg-background/80 transition-colors"
                       >
-                        <service.icon className="w-5 h-5 text-primary" />
-                        <span className="text-sm">{service.name}</span>
+                        <service.icon className="w-5 h-5 text-primary shrink-0" />
+                        <span className="text-sm truncate">{service.name}</span>
                       </div>
                     ))}
                   </div>
