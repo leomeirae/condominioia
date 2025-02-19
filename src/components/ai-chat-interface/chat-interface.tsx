@@ -136,62 +136,48 @@ export function ChatInterface({ userInfo }: ChatInterfaceProps) {
 
       {/* Chat Messages */}
       <div className="flex-1 overflow-y-auto p-3 space-y-3">
-        {messages.length === 0 ? (
-          <div className="space-y-4">
-            {predefinedQuestions.map((question, index) => (
+        <div className="space-y-4">
+          {messages.map((message) => (
+            <div
+              key={message.id}
+              className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
+            >
               <div
-                key={index}
-                onClick={() => handleSendMessage(question)}
-                className="p-4 bg-[#1E1F25] rounded-lg cursor-pointer hover:bg-[#2A2B32] transition-colors"
+                className={`${
+                  message.sender === "user"
+                    ? "bg-[#3B82F6]"
+                    : "bg-[#1E1F25]"
+                } p-4 rounded-lg max-w-[85%]`}
               >
-                <p className="text-white">{question}</p>
+                <p className="text-white">{message.text}</p>
               </div>
-            ))}
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {messages.map((message) => (
-              <div
-                key={message.id}
-                className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
-              >
-                <div
-                  className={`${
-                    message.sender === "user"
-                      ? "bg-[#3B82F6]"
-                      : "bg-[#1E1F25]"
-                  } p-4 rounded-lg max-w-[85%]`}
-                >
-                  <p className="text-white">{message.text}</p>
-                </div>
+            </div>
+          ))}
+          {/* Streaming message */}
+          {currentStreamedMessage && (
+            <div className="flex justify-start">
+              <div className="bg-[#1E1F25] p-4 rounded-lg max-w-[85%]">
+                <p className="text-white">{currentStreamedMessage}</p>
               </div>
-            ))}
-            {/* Streaming message */}
-            {currentStreamedMessage && (
-              <div className="flex justify-start">
-                <div className="bg-[#1E1F25] p-4 rounded-lg max-w-[85%]">
-                  <p className="text-white">{currentStreamedMessage}</p>
-                </div>
+            </div>
+          )}
+          {/* Loading indicator */}
+          {isLoading && !currentStreamedMessage && (
+            <div className="flex justify-start">
+              <div className="bg-[#1E1F25] p-4 rounded-lg max-w-[85%]">
+                <p className="text-white">Digitando...</p>
               </div>
-            )}
-            {/* Loading indicator */}
-            {isLoading && !currentStreamedMessage && (
-              <div className="flex justify-start">
-                <div className="bg-[#1E1F25] p-4 rounded-lg max-w-[85%]">
-                  <p className="text-white">Digitando...</p>
-                </div>
-              </div>
-            )}
-            {/* Invisible element to scroll to */}
-            <div ref={messagesEndRef} />
-          </div>
-        )}
+            </div>
+          )}
+          {/* Invisible element to scroll to */}
+          <div ref={messagesEndRef} />
+        </div>
       </div>
 
       {/* Input Area with Predefined Questions */}
       <div className="p-3 space-y-2 border-t border-gray-800">
         {/* Predefined Questions */}
-        <div className="space-y-1.5 max-h-[30vh] sm:max-h-[200px] overflow-y-auto">
+        <div className={`space-y-1.5 ${messages.length > 0 ? 'hidden' : ''} max-h-[30vh] sm:max-h-[200px] overflow-y-auto`}>
           {predefinedQuestions.map((question, index) => (
             <button
               key={index}

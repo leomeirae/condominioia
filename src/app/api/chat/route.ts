@@ -6,30 +6,20 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 })
 
-// ID do assistente na OpenAI
-const ASSISTANT_ID = "asst_0vmJtiMOtQBYn0mea7BQQLXW"
+const systemPrompt = `You are the Concierge AI of the CondomínioIA platform. Your mission is to present our platform in a clear, dynamic, and engaging way, highlighting how we centralize essential condominium services and provide an integrated, personalized experience.
+
+Instructions:
+Use your complete database with Q&A examples and detailed information on features and benefits.
+Provide educational, objective, and persuasive responses.
+Simulate real-life scenarios—such as scheduling maintenance, cleaning, mobility, and well-being—to demonstrate how CondomínioIA simplifies residents' daily routines and optimizes management for administrators.
+Maintain a friendly, empathetic, and professional tone; act like a knowledgeable salesperson who deeply understands the product.
+Keep responses short (maximum 3-4 sentences), dynamic, and solution-oriented, always emphasizing the value of our system.
+If you receive off-topic questions or offensive messages, respond politely: "Sorry, but I cannot answer that question. Let's focus on what relates to CondomínioIA."
+When interacting with users, emphasize the convenience of centralizing essential services in one place.`
 
 export async function POST(req: Request) {
   try {
-    const { message, userInfo, threadId } = await req.json()
-
-    // Usar thread existente ou criar novo
-    const currentThreadId = threadId || (await openai.beta.threads.create()).id
-
-    // Adicionar a mensagem do usuário ao Thread
-    await openai.beta.threads.messages.create(currentThreadId, {
-      role: "user",
-      content: message,
-      metadata: {
-        userName: userInfo.name,
-        userEmail: userInfo.email
-      }
-    })
-
-    // Executar o assistente
-    const run = await openai.beta.threads.runs.create(currentThreadId, {
-      assistant_id: ASSISTANT_ID
-    })
+    const { message } = await req.json()
 
     // Create a new TransformStream for streaming
     const encoder = new TextEncoder()
@@ -39,39 +29,22 @@ export async function POST(req: Request) {
     // Start the streaming process
     const processStream = async () => {
       try {
-        let runStatus = await openai.beta.threads.runs.retrieve(currentThreadId, run.id)
-        let attempts = 0
-        const maxAttempts = 30
+        const stream = await openai.chat.completions.create({
+          model: "gpt-4",
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: message }
+          ],
+          stream: true,
+          temperature: 0.7,
+          max_tokens: 300, // Limitar o tamanho da resposta
+        })
 
-        while (runStatus.status === "queued" || runStatus.status === "in_progress") {
-          if (attempts >= maxAttempts) {
-            throw new Error("Tempo limite excedido")
+        for await (const chunk of stream) {
+          const content = chunk.choices[0]?.delta?.content || ""
+          if (content) {
+            await writer.write(encoder.encode(content))
           }
-
-          await new Promise(resolve => setTimeout(resolve, 1000))
-          runStatus = await openai.beta.threads.runs.retrieve(currentThreadId, run.id)
-          attempts++
-        }
-
-        if (runStatus.status === "completed") {
-          const messages = await openai.beta.threads.messages.list(currentThreadId)
-          const lastMessage = messages.data[0]
-          
-          if (lastMessage.content[0].type === 'text') {
-            const response = lastMessage.content[0].text.value
-            const chunks = response.split(" ")
-            
-            // Stream each word with a small delay
-            for (const chunk of chunks) {
-              await writer.write(encoder.encode(chunk + " "))
-              await new Promise(resolve => setTimeout(resolve, 50))
-            }
-
-            // Send the threadId as the last chunk
-            await writer.write(encoder.encode(`\n[THREAD_ID]${currentThreadId}[/THREAD_ID]`))
-          }
-        } else {
-          throw new Error(`Run failed with status: ${runStatus.status}`)
         }
       } catch (error) {
         console.error("Streaming error:", error)

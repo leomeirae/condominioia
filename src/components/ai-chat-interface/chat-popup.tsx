@@ -33,8 +33,8 @@ export function ChatPopup({ isOpen, onClose }: ChatPopupProps) {
   }
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 w-[420px]">
-      <div className="bg-[#14151A] rounded-lg shadow-2xl">
+    <div className="fixed inset-0 sm:inset-auto sm:right-4 sm:bottom-4 sm:w-[420px] z-50 m-0 sm:m-4">
+      <div className="bg-[#14151A] rounded-lg shadow-2xl h-full sm:h-auto">
         {/* Header com controles */}
         <div className="bg-[#14151A] px-4 py-2 flex items-center justify-end rounded-t-lg border-b border-gray-800">
           <div className="flex gap-2">

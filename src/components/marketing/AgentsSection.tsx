@@ -11,7 +11,8 @@ import {
   Legend,
   TooltipItem,
   Scale,
-  CoreScaleOptions
+  CoreScaleOptions,
+  ScriptableContext
 } from 'chart.js'
 
 ChartJS.register(
@@ -28,6 +29,11 @@ const AgentsSection = () => {
     indexAxis: "y" as const,
     responsive: true,
     maintainAspectRatio: false,
+    animation: {
+      duration: 2000,
+      easing: 'easeInOutQuart' as const,
+      delay: (context: ScriptableContext<"bar">) => context.dataIndex * 300
+    },
     plugins: {
       legend: {
         display: false,
@@ -89,7 +95,7 @@ const AgentsSection = () => {
   return (
     <section className="w-full py-16 bg-[#0A1628]">
       <div className="container mx-auto px-4 max-w-6xl">
-        <div className="space-y-4">
+        <div className="space-y-4 animate-fade-in">
           <h2 className="text-3xl font-bold tracking-tight text-white">
             Agentes Inteligentes: Revolucionando a Gestão
           </h2>
@@ -100,13 +106,13 @@ const AgentsSection = () => {
           </p>
         </div>
 
-        <div className="bg-black/40 backdrop-blur-sm p-6 rounded-xl border border-white/10 mt-8 mb-4">
+        <div className="bg-black/40 backdrop-blur-sm p-6 rounded-xl border border-white/10 mt-8 mb-4 [animation-delay:300ms] animate-fade-in">
           <div className="h-[300px]">
             <Bar options={options} data={data} />
           </div>
         </div>
         
-        <p className="text-sm text-gray-400 text-center italic mb-12">
+        <p className="text-sm text-gray-400 text-center italic mb-12 [animation-delay:600ms] animate-fade-in">
           Este gráfico ilustra o aumento de eficiência observado em diferentes setores 
           com a implementação de Agentes Inteligentes. Dados baseados em estudos da McKinsey e Gartner.
         </p>
