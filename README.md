@@ -4,7 +4,7 @@ Um sistema inteligente de gestão condominial potencializado por IA.
 
 ## Sobre o Projeto
 
-Condomínio IA é uma plataforma moderna que utiliza inteligência artificial para transformar a gestão de condomínios. O sistema integra-se com ferramentas existentes e oferece:
+Condomínio IA é uma plataforma moderna que utiliza Agentes de IA para transformar a gestão de condomínios. O sistema integra-se com ferramentas existentes e oferece:
 
 - 🤖 Assistente virtual inteligente para gestão
 - 📊 Analytics e insights em tempo real

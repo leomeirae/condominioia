@@ -17,7 +17,7 @@ interface MetadataProps {
 
 export const generateMetadata = ({
     title = `Condomínio IA - Agentes de IA que Revolucionam a Gestão`,
-    description = `Condomínio IA é uma plataforma de inteligência artificial que transforma a gestão de condomínios. Utilize IA para automatizar fluxos de trabalho, melhorar a colaboração e aumentar a produtividade. Experimente a gestão inteligente hoje.`,
+    description = `Condomínio IA é uma plataforma de Agentes de inteligência artificial que transformam a gestão de condomínios. Revolucione a gestão de condomínios com IA.`,
     icons = [
         {
             rel: "icon",
