@@ -14,9 +14,10 @@ interface Message {
 
 interface ChatInterfaceProps {
   userInfo: UserInfo;
+  onClose?: () => void;
 }
 
-export function ChatInterface({ userInfo }: ChatInterfaceProps) {
+export function ChatInterface({ userInfo, onClose }: ChatInterfaceProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const [messages, setMessages] = useState<Message[]>([])
   const [inputMessage, setInputMessage] = useState("")
@@ -117,7 +118,7 @@ export function ChatInterface({ userInfo }: ChatInterfaceProps) {
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-80px)] sm:h-[600px] max-h-[80vh] bg-[#1a1c2e] text-white">
+    <div className="flex flex-col h-full bg-[#1a1c2e] text-white">
       {/* Header with Avatar */}
       <div className="p-3 text-center border-b border-gray-800">
         <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-1">
@@ -132,6 +133,13 @@ export function ChatInterface({ userInfo }: ChatInterfaceProps) {
           <div className="w-2 h-2 bg-blue-500 rounded-full" />
           <span className="truncate">Condômino - • {userInfo.name}</span>
         </div>
+        {/* Botão de Finalizar Chat */}
+        <button
+          onClick={onClose}
+          className="mt-2 px-4 py-1.5 bg-red-600 hover:bg-red-700 text-white text-sm rounded-full transition-colors"
+        >
+          Finalizar Chat
+        </button>
       </div>
 
       {/* Chat Messages */}
@@ -175,7 +183,7 @@ export function ChatInterface({ userInfo }: ChatInterfaceProps) {
       </div>
 
       {/* Input Area with Predefined Questions */}
-      <div className="p-3 space-y-2 border-t border-gray-800">
+      <div className="p-3 space-y-2 border-t border-gray-800 bg-[#14151A] sticky bottom-0">
         {/* Predefined Questions */}
         <div className={`space-y-1.5 ${messages.length > 0 ? 'hidden' : ''} max-h-[30vh] sm:max-h-[200px] overflow-y-auto`}>
           {predefinedQuestions.map((question, index) => (
@@ -190,7 +198,7 @@ export function ChatInterface({ userInfo }: ChatInterfaceProps) {
         </div>
 
         {/* Message Input */}
-        <div className="flex items-center space-x-2 bg-[#2b2d42] rounded-lg p-2">
+        <div className="relative flex items-center space-x-2 bg-[#2b2d42] rounded-lg p-2">
           <Input
             placeholder="Digite sua mensagem..."
             value={inputMessage}
